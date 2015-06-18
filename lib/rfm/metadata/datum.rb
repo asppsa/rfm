@@ -23,6 +23,9 @@ module Rfm
 				table, name = @attributes['name'].to_s.split('::')
 				#puts ['DATUM_portal_field_element_close_callback_01', table, name].join(', ')
 				name = get_mapped_name(name, resultset)
+                return unless resultset.portal_meta[table.downcase] &&
+                              resultset.portal_meta[table.downcase][name.downcase]
+
 				field = resultset.portal_meta[table.downcase][name.downcase]
 				data = @attributes['data']
 				#puts ['DATUM_portal_field_element_close_callback_02', "cursor.parent.object.class: #{cursor.parent.object.class}", "resultset.class: #{resultset.class}", "table: #{table}", "name: #{name}", "field: #{field}", "data: #{data}"]
