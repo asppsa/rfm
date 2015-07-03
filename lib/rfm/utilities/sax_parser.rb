@@ -387,7 +387,7 @@ module Rfm
             obj.send *[code, params].flatten(1).compact
           when code.is_a?(String)
           	#puts ["\nGET_CALLBACK evaling string", obj.class, code]
-            obj.send :eval, code
+            obj.instance_eval code
             #eval(code, caller_binding)
           end		      
         end
