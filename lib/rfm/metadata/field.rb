@@ -84,12 +84,17 @@ module Rfm
         end
         
         case result
-        when "text"      then value
-        when "number"    then BigDecimal.new(value.to_s)
-        when "date"      then Date.strptime(value, resultset_meta.date_format)
-        when "time"      then DateTime.strptime("1/1/-4712 #{value}", "%m/%d/%Y #{resultset_meta.time_format}")
-        when "timestamp" then DateTime.strptime(value, resultset_meta.timestamp_format)
-        when "container" then
+        when "text"
+          value
+        when "number"
+          BigDecimal.new(value.to_s)
+        when "date"
+          Date.strptime(value, resultset_meta.date_format) unless value == '?'
+        when "time"
+          DateTime.strptime("1/1/-4712 #{value}", "%m/%d/%Y #{resultset_meta.time_format}")
+        when "timestamp"
+          DateTime.strptime(value, resultset_meta.timestamp_format)
+        when "container"
         	#resultset_meta = resultset.instance_variable_get(:@meta)
         	if resultset_meta && resultset_meta['doctype'] && value.to_s[/\?/]
         		URI.parse(resultset_meta['doctype'].last.to_s).tap{|uri| uri.path, uri.query = value.split('?')}
