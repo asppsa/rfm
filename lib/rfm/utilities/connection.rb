@@ -180,7 +180,7 @@ module Rfm
       # FIXME: proxy support
 
       Faraday.new(options) do |conn|
-        conn.request :url_encoded
+        conn.request :rfm_url_encoded
         conn.response :logger if state[:log_actions] || state[:log_responses]
 
         if state[:account_name] || state[:password]
@@ -197,6 +197,19 @@ module Rfm
       end
     end
 
+		class URLEncodedMiddleware
+			def initialize app
+				@app = app
+			end
+
+			def call env
+				env.request_headers['Content-Type'] ||= 'application/x-www-form-urlencoded'.freeze
+				env.body = URI.encode_www_form(env.body)
+				@app.call env
+			end
+		end
+
+		Faraday::Request.register_middleware :rfm_url_encoded => URLEncodedMiddleware
   end # Connection
 
 
