@@ -87,7 +87,7 @@ module Rfm
         when "text"
           value
         when "number"
-          BigDecimal.new(value.to_s)
+          BigDecimal(value.to_s)
         when "date"
           Date.strptime(value, resultset_meta.date_format) unless value == '?'
         when "time"
